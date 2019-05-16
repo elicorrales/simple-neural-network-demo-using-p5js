@@ -12,18 +12,34 @@
                     <tr> 
                         <td width="100px"></td>
                         <td>
+                            <!--
                             <button id="btnIncRows" type="button" class="btn btn-primary" onclick="doIncRows()">Inc Rows</button>
                             <button id="btnDecRows" type="button" class="btn btn-primary" onclick="doDecRows()">Dec Rows</button>
                             <button id="btnIncCols" type="button" class="btn btn-primary" onclick="doIncCols()">Inc Cols</button>
                             <button id="btnDecCols" type="button" class="btn btn-primary" onclick="doDecCols()">Dec Cols</button>
                             <button id="randomize" type="button" class="btn btn-primary" onclick="doRandomize()">Randomize</button>
+                        -->
                         </td>
                         <td width="100px"></td>
                     </tr>
                     <tr> 
-                        <td width="100px"></td>
+                        <td width="100px">
+                            <button type="button" class="btn btn-primary btn-block" onclick="doIncRows()">Inc Rows</button>
+                            <button type="button" class="btn btn-primary btn-block" onclick="doDecRows()">Dec Rows</button>
+                            <button type="button" class="btn btn-primary btn-block" onclick="doIncCols()">Inc Cols</button>
+                            <button type="button" class="btn btn-primary btn-block" onclick="doDecCols()">Dec Cols</button>
+                            <button type="button" class="btn btn-primary btn-block" onclick="doRandomize()">Randomize</button>
+                            <button type="button" class="btn btn-primary btn-block" onclick="doIncVal()">Inc Factor</button>
+                            <button type="button" class="btn btn-primary btn-block" onclick="doDecVal()">Dec Factor</button>
+                            <button type="button" class="btn btn-primary btn-block" onclick="doAddVal()">Add To</button>
+                            <button type="button" class="btn btn-primary btn-block" onclick="doMultVal()">Multiply</button>
+                        </td>
                         <td ><div id="myCanvas" ></div></td>
-                        <td width="100px"></td>
+                        <td width="100px">
+                        <table border="1" width="100%">
+                            <tr><td>Factor:</td><td><div id="cellFactor"></div></td></tr>
+                        </table>
+                        </td>
                     </tr>
                     <tr> 
                         <td width="100px"></td>
