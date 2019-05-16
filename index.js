@@ -55,9 +55,11 @@ function displayMatrix() {
 var brain = new NeuralNetwork(numInputNeurons, numHiddenNeurons, numOutputNeurons);
 
 function setup() {
-    var canvas = createCanvas(400, 400);
+    var canvas = createCanvas(700, 400);
+    canvasElem.style.width = ''
     canvas.parent('myCanvas');
     background(0);
+    displayMatrix();
 }
 
 function draw() {
