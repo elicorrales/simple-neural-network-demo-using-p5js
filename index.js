@@ -11,24 +11,23 @@ const canvasElem = document.getElementById('myCanvas');
 const matrix1Elem = document.getElementById('myMatrix');
 const dotMatrix1Elem = document.getElementById('myDotMatrix');
 const matrix2Elem = document.getElementById('myMatrix2');
-const dotMatrix2Elem = document.getElementById('myDotMatrix2');
 const factor1Elem = document.getElementById('cellFactor1');
 const factor2Elem = document.getElementById('cellFactor2');
 const matrix1SelectElem = document.getElementById('selectMatrix1');
 const matrix2SelectElem = document.getElementById('selectMatrix2');
 
 
-let numMatrixRows = 3;
-let numMatrixCols = 2;
-let matrix1 = new Matrix(numMatrixRows,numMatrixCols,'Matrix1');
-let matrix2 = new Matrix(numMatrixRows,numMatrixCols,'Matrix2');
-let redoMatrixTable = false;
+var numMatrixRows = 3;
+var numMatrixCols = 2;
+var matrix1 = new Matrix(numMatrixRows,numMatrixCols,'Matrix1');
+var matrix2 = new Matrix(numMatrixRows,numMatrixCols,'Matrix2');
+var redoMatrixTable = false;
 
 canvasElem.style.width = canvasWidth;
 canvasElem.style.height = canvasHeight;
 
-matrix1Selected = false;
-matrix2Selected = false;
+var matrix1Selected = false;
+var matrix2Selected = false;
 
 const showMessage = (type, message) => {
     messagesElem.innerHTML = message;
@@ -172,7 +171,7 @@ const doRandomize = () => {
     clearMessage();
     if (matrix1Selected) {
         matrix1.randomize();
-        factor1Elem.innerHTML = matrix.cellFactor;
+        factor1Elem.innerHTML = matrix1.cellFactor;
     }
     if (matrix2Selected) {
         matrix2.randomize();
@@ -248,14 +247,6 @@ const doHadamardByMatrix1 = () => {
     redoMatrixTable = true;
 }
 
-const doDotProdByMatrix1 = () => {
-    clearMessage();
-    if (!matrix2.mult(matrix1,'dot')) {
-        showMessage('danger','Matrix Sizes Dont Align'); 
-    }
-    redoMatrixTable = true;
-}
-
 
 function displayMatrix(whichMatrixElem, whichMatrix) {
     let html = '';
@@ -287,7 +278,6 @@ function draw() {
         displayMatrix(matrix1Elem, matrix1);
         if (matrix1.dotMatrix !== undefined) { displayMatrix(dotMatrix1Elem, matrix1.dotMatrix); }
         displayMatrix(matrix2Elem, matrix2);
-        if (matrix2.dotMatrix !== undefined) { displayMatrix(dotMatrix2Elem, matrix2.dotMatrix); }
     }
 }
 

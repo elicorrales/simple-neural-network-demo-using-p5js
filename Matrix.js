@@ -47,8 +47,24 @@ class Matrix {
             }
 
         } else if (n instanceof Matrix && type === 'dot' && this.cols === n.rows) { 
-            this.dotMatrix = new Matrix(n.rows,this.cols,'dot'+this.name);
-
+            let A = this;
+            console.log('A: ' + A.name);
+            let B = n;
+            console.log('B: ' + B.name);
+            this.dotMatrix = new Matrix(B.rows,A.cols,'dot'+A.name);
+            let C = this.dotMatrix;
+            console.log('C: ' + C.name);
+            for (let r=0; r<C.rows; r++) {
+                for (let c=0; c<C.cols; c++) {
+                    let sum = 0;
+                    for (let aCols=0; aCols<A.cols; aCols++) {
+                        let A_r_Cols = A.matrix[r][aCols];
+                        let B_a_Cols_c = B.matrix[aCols][c];
+                        sum += A.matrix[r][aCols] * B.matrix[aCols][c];
+                    }
+                    C.matrix[r][c] = sum;
+                }
+            }
         } else if (n instanceof Matrix) { 
             return false;
         } else if (n !== undefined) {
@@ -101,7 +117,7 @@ class Matrix {
 
 
     addVal() {
-        this.add(this.cellFactor);
+        return this.add(this.cellFactor);
     }
 
     multVal() {
