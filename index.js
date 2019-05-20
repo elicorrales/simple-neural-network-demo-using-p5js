@@ -9,13 +9,14 @@ const squareFeet = 1000;
 const messagesElem = document.getElementById('messages');
 const canvasElem = document.getElementById('myCanvas');
 const matrix1Elem = document.getElementById('myMatrix');
-const dotMatrix1Elem = document.getElementById('myDotMatrix');
+const dotMatrixElem = document.getElementById('myDotMatrix');
+const transposedMatrixElem = document.getElementById('myTransposedMatrix');
 const matrix2Elem = document.getElementById('myMatrix2');
+const mainFactorElem = document.getElementById('mainFactor');
 const factor1Elem = document.getElementById('cellFactor1');
 const factor2Elem = document.getElementById('cellFactor2');
 const matrix1SelectElem = document.getElementById('selectMatrix1');
 const matrix2SelectElem = document.getElementById('selectMatrix2');
-
 
 var numMatrixRows = 3;
 var numMatrixCols = 2;
@@ -42,11 +43,31 @@ const clearMessage = () => {
 const createNewMatrix = () => {
     if (matrix1Selected) {
         matrix1 = new Matrix(numMatrixRows,numMatrixCols,'Matrix1');
+        factor1Elem.innerHTML = parseFloat(matrix1.cellFactor).toFixed(2);
     }
     if (matrix2Selected) {
         matrix2 = new Matrix(numMatrixRows,numMatrixCols,'Matrix2');
+        factor2Elem.innerHTML = parseFloat(matrix2.cellFactor).toFixed(2);
     }
     redoMatrixTable = true;
+}
+
+const doOnChangeMainFactor = () => {
+    if (matrix1Selected) {
+        matrix1.cellFactor = mainFactorElem.value;
+        factor1Elem.innerHTML = parseFloat(mainFactorElem.value).toFixed(2);
+    }
+    if (matrix2Selected) {
+        matrix2.cellFactor = mainFactorElem.value;
+        factor2Elem.innerHTML = parseFloat(mainFactorElem.value).toFixed(2);
+    }
+}
+
+const doSetFactors = () => {
+    matrix1.cellFactor = mainFactorElem.value;
+    factor1Elem.innerHTML = parseFloat(mainFactorElem.value).toFixed(2);
+    matrix2.cellFactor = mainFactorElem.value;
+    factor2Elem.innerHTML = parseFloat(mainFactorElem.value).toFixed(2);
 }
 
 const doIncRows = () => {
@@ -215,19 +236,17 @@ const doAddByMatrix2 = () => {
     redoMatrixTable = true;
 }
 
-const doHadamardByMatrix2 = () => {
-    clearMessage();
-    if (!matrix1.mult(matrix2,'hadamard')) {
-        showMessage('danger','Matrix Sizes Dont Align'); 
-    }
-    redoMatrixTable = true;
-}
-
 const doDotProdByMatrix2 = () => {
     clearMessage();
     if (!matrix1.mult(matrix2,'dot')) {
         showMessage('danger','Matrix Sizes Dont Align'); 
     }
+    redoMatrixTable = true;
+}
+
+const doTransposeMatrix1 = () => {
+    clearMessage();
+    matrix1.transpose();
     redoMatrixTable = true;
 }
 
@@ -239,21 +258,21 @@ const doAddByMatrix1 = () => {
     redoMatrixTable = true;
 }
 
-const doHadamardByMatrix1 = () => {
-    clearMessage();
-    if (!matrix2.mult(matrix1,'hadamard')) {
-        showMessage('danger','Matrix Sizes Dont Align'); 
+function changeCellValue(name,row,col,obj) {
+    if (name === matrix1.name) {
+        matrix1.data._data[row][col] = obj.value;
+    } else if (name === matrix2.name) {
+        matrix2.data._data[row][col] = obj.value;
     }
-    redoMatrixTable = true;
 }
-
 
 function displayMatrix(whichMatrixElem, whichMatrix) {
     let html = '';
     for (let r=0;r<whichMatrix.rows;r++) {
         html += '<tr>';
         for (let c=0;c<whichMatrix.cols;c++) {
-            html += '<td id="row'+r+'col'+c+'" ><input type="text" value="'+ parseFloat(whichMatrix.matrix[r][c]).toFixed(2) + '" maxlength="7" size="7"/></td>';
+            //html += '<td id="row'+r+'col'+c+'" ><input id="row'+r+'col'+c+'" type="text" value="'+ parseFloat(whichMatrix.data.get([r,c])).toFixed(2) + '" maxlength="7" size="7" onchange="changeCellValue('+whichMatrixElem+','+r+','+c+')"/></td>';
+            html += '<td><input id="row'+r+'col'+c+'" type="text" value="'+ parseFloat(whichMatrix.data.get([r,c])).toFixed(2) + '" maxlength="7" size="7" onchange="changeCellValue(\''+whichMatrix.name+'\','+r+','+c+',this)"/></td>';
         }
         html += '</tr>';
     };
@@ -276,7 +295,10 @@ function draw() {
     ellipse(width/2,height/2,width,height);
     if (redoMatrixTable) { 
         displayMatrix(matrix1Elem, matrix1);
-        if (matrix1.dotMatrix !== undefined) { displayMatrix(dotMatrix1Elem, matrix1.dotMatrix); }
+        if (matrix1.dotMatrix !== undefined) {
+             displayMatrix(dotMatrixElem, matrix1.dotMatrix);
+        }
+        if (matrix1.transposed !== undefined) { displayMatrix(transposedMatrixElem, matrix1.transposed); }
         displayMatrix(matrix2Elem, matrix2);
     }
 }
