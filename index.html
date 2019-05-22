@@ -24,6 +24,7 @@
                     </tr>
                     <tr> 
                         <td width="100px">
+                            <strong>Input Actions On Selected Matrix</strong>
                             <button type="button" class="btn btn-primary btn-block" onclick="doIncRows()">Inc Rows</button>
                             <button type="button" class="btn btn-primary btn-block" onclick="doDecRows()">Dec Rows</button>
                             <button type="button" class="btn btn-primary btn-block" onclick="doIncCols()">Inc Cols</button>
@@ -37,36 +38,47 @@
                         <td ><div id="myCanvas" ></div></td>
                         <td width="100px">
                         <table border="1" width="100%">
-                            <tr><td>Factor:</td><td><input type="text" id="mainFactor" value="1" onchange="doOnChangeMainFactor()"></td></tr>
-                            <button type="button" class="btn btn-primary btn-block" onclick="doSetFactors()">Set Factors</button>
+                            <tr><td><strong>Network Config:</strong></td></tr>
+
+                            <tr><td>Nodes In:<input type="text" id="nnInputs" value="2" onchange="doOnChangeNnInputs()" maxlength="7" size="7"></td></tr>
+                            <tr><td>Nodes Hidden:<input type="text" id="nnHidden" value="2" onchange="doOnChangeNnHidden()" maxlength="7" size="7"></td></tr>
+                            <tr><td>Nodes Out:<input type="text" id="nnOutput" value="1" onchange="doOnChangeNnOutput()" maxlength="7" size="7"></td></tr>
+                            <tr><td><button type="button" class="btn btn-primary btn-block" onclick="doCreateNetwork()">Create Network</button></td></tr>
+                            <tr><td><p></p></td></tr>
+                            <tr><td><strong>Global:</strong></td></tr>
+                            <tr><td>Factor: <input type="text" id="mainFactor" value="1" onchange="doOnChangeMainFactor()" maxlength="7" size="7"></td></tr>
+                            <tr><td><button type="button" class="btn btn-primary btn-block" onclick="doSetFactors()">Set Matrix Scalar</button></td></tr>
                         </table>
                         </td>
                     </tr>
                     <tr> 
                         <td width="100px">
-                            Factor:<div id="cellFactor1"></div>
+                            <strong><u>Matrix 1 Actions</u></strong></br>
+                            Cell Scalar:<div id="cellFactor1">0</div>
                             <button id="selectMatrix1" type="button" class="btn btn-secondary btn-block" onclick="doSelectMatrix1()">Select</button>
                             <button type="button" class="btn btn-secondary btn-block" onclick="doAddByMatrix2()">Add by [m2]</button>
                             <button type="button" class="btn btn-secondary btn-block" onclick="doDotProdByMatrix2()">Dot Prod [m1]*[m2]</button>
                             <button type="button" class="btn btn-secondary btn-block" onclick="doTransposeMatrix1()">Transpose [m1]</button>
                         </td>
                         <td><table id="myMatrix" border="1" width="100%"></table></td>
-                        <td width="100px"><u>Dot Product [m1]*[m2]</u> <table id="myDotMatrix" border="1" width="100%"></table> </td>
+                        <td width="100px"><u>Dot Product [m1]*[m2]:</u> <table id="myDotMatrix" border="1" width="100%"></table> </td>
                     </tr>
                     <tr> 
                         <td width="100px">
-                            Factor:<div id="cellFactor2"></div>
+                            <strong><u>Matrix 2 Actions</u></strong></br>
+                            Cell Scalar:<div id="cellFactor2">0</div>
                             <button id="selectMatrix2" type="button" class="btn btn-secondary btn-block" onclick="doSelectMatrix2()">Select</button>
                             <button type="button" class="btn btn-secondary btn-block" onclick="doAddByMatrix1()">Add by [m1]</button>
                         </td>
                         <td><table id="myMatrix2" border="1" width="100%"></table></td>
-                        <td width="100px"> <table id="myTransposedMatrix" border="1" width="100%"></table> </td>
+                        <td width="100px"><u>Transposed [m1]:</u> <table id="myTransposedMatrix" border="1" width="100%"></table> </td>
                     </tr>
                 </table>
     </body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.10.3/math.min.js"></script>
     <script src="../../p5/p5.min.js"></script>
     <script src="Matrix.js"></script>
+    <script src="matrix.page.controls.js"></script>
     <script src="NeuralNetwork.js"></script>
     <script src="index.js"></script>
 </html>

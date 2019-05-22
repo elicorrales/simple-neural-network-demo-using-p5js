@@ -5,29 +5,59 @@ class Matrix {
         this.rows = rows;
         this.cols = cols;
         this.cellFactor = 0;
-        this.temp = [];
         this.dotMatrix;
         this.transposed;
-        for (let r=0;r<this.rows;r++) {
-            this.temp[r] = [];
-            for (let c=0;c<this.cols;c++) {
-                this.temp[r].push(0);
+        this.data = math.zeros(this.rows,this.cols);
+    }
+
+    static fromArray(array, name) {
+        let rows = array.length;
+        if (!(array[0] instanceof Array)) {
+            for (let r=0; r<rows; r++) {
+                let val = array[r];
+                let arr = [];
+                arr.push(val);
+                array[r] = arr;
             }
         }
-        this.data = math.matrix(this.temp);
+        let temp = math.matrix(array);
+        let tempM = new Matrix(temp.size()[0], temp.size()[1], name);
+        tempM.data = temp;
+        return tempM;
+    }
+
+
+    print() {
+        console.log('======Matrix======');
+        console.log(this.name + ', r:' + this.rows + ', c:' + this.cols + ', f:' + this.cellFactor);
+        console.table(this.data._data);
+    }
+
+    randomize() {
+        for (let r=0;r<this.rows;r++) {
+            for (let c=0;c<this.cols;c++) {
+                this.data._data[r][c] = math.random() * 2 - 1;
+            }
+        }
     }
 
     add(n) {
         if (n instanceof Matrix && n.rows === this.rows && n.cols === this.cols) { 
+            let temp = math.add(this.data, n.data);
+            /*
             for (let r=0;r<this.rows;r++) {
                 for (let c=0;c<this.cols;c++) {
                     this.data._data[r][c] += parseFloat(n.data._data[r][c]);
                 }
             }
+            */
+            this.data = temp;
 
         } else if (n instanceof Matrix) { 
             return false;
         } else if (n !== undefined) {
+            this.execFuncForEveryCell(this.addScalar, n);
+            /*
             for (let r=0;r<this.rows;r++) {
                 for (let c=0;c<this.cols;c++) {
                     let v = parseFloat(n).toFixed(2);
@@ -35,34 +65,35 @@ class Matrix {
                     this.data._data[r][c] = parseFloat(v + d).toFixed(2);
                 }
             }
+            */
         } else {
             return false;
         }
         return true;
     }
 
-    createMatrixCopy(m) {
-        var n = [];
-        for (let i=0;i<m.length;i++) {
-            var row = [];
-            for (let j=0;j<m[0].length;j++) {
-                row.push(m[i][j]);
-            }
-            n.push(row);
+    static multiply(a, b, name) {
+        if (a instanceof Matrix && b instanceof Matrix && a.cols === b.rows) {
+            let temp = math.multiply(a.data, b.data);
+            let result =  Matrix.fromArray(temp._data, name);
+            return  result;
+        } else {
+            throw 'inputs a and b must be matrices.  a.cols must equal b.rows';
         }
-
-        return n;
     }
 
     mult(n, type) {
-        if (type === 'dot' && n instanceof Matrix && this.rows === n.cols && this.cols === n.rows) {
+        //if (type === 'dot' && n instanceof Matrix && this.rows === n.cols && this.cols === n.rows) {
+        if (type === 'mult' && n instanceof Matrix && this.cols === n.rows ) { //{ && this.cols === n.rows) {
             let temp = math.multiply(this.data , n.data);
-            this.dotMatrix = new Matrix(temp.size()[0],temp.size()[1],'myDotMatrix');
+            this.dotMatrix = new Matrix(temp.size()[0],temp.size()[1],'myMultMatrix');
             this.dotMatrix.data = temp;
             return true;
         } else if (n instanceof Matrix) {
             return false;
         } else if(n !== undefined) {
+            this.execFuncForEveryCell(this.multiplyByScalar, n);
+/*
             for (let r=0;r<this.rows;r++) {
                 for (let c=0;c<this.cols;c++) {
                     let v = parseFloat(n).toFixed(2);
@@ -70,26 +101,39 @@ class Matrix {
                     this.data._data[r][c] = parseFloat(v*d).toFixed(2);
                 }
             }
+*/
             return true;
         }
         return false;
     }
 
-    transpose() {
-        let data = Matrix.transpose(this.data);
-        let rows = data.length;
-        let cols = data[0].length;
-        this.transposed = new Matrix(rows, cols, 'M1Trans');
-        this.transposed.data = data;
+    addScalar(cellValue, scalar) { 
+        return parseFloat(cellValue) + parseFloat(scalar);
     }
-    randomize() {
-        for (let r=0;r<this.rows;r++) {
-            for (let c=0;c<this.cols;c++) {
-                this.data._data[r][c] = random(-1,1);
-            }
-        }
+    multiplyByScalar(cellValue, scalar) {
+        return parseFloat(cellValue) * parseFloat(scalar);
     }
 
+    execFuncForEveryCell(func, scalar) {
+            for (let r=0;r<this.rows;r++) {
+                for (let c=0;c<this.cols;c++) {
+                    let cell = this.data._data[r][c];
+                    let cellValue = parseFloat(cell);
+                    this.data._data[r][c] = parseFloat(func(cellValue, scalar));
+                }
+            }
+
+
+    }
+
+    transpose() {
+        let temp = math.transpose(this.data);
+        let rows = temp.size()[0];
+        let cols = temp.size()[1];
+        this.transposed = new Matrix(rows, cols, 'myTransposedMatrix');
+        this.transposed = new Matrix(temp.size()[0],temp.size()[1],'myDotMatrix');
+        this.transposed.data = temp;
+    }
     incVal() {
         let value = parseFloat(this.cellFactor);
         //if (value < 0.1) value += parseFloat(0.01);
