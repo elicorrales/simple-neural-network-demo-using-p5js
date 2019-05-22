@@ -85,6 +85,16 @@ class Matrix {
         }
     }
 
+    static subtract(a, b, name) {
+        if (a instanceof Matrix && b instanceof Matrix && a.rows === b.rows && a.cols === b.cols ) {
+            let temp = math.subtract(a.data, b.data);
+            let result =  Matrix.fromArray(temp._data, name);
+            return  result;
+        } else {
+            throw 'inputs a and b must be matrices.  a.cols must equal b.rows';
+        }
+    }
+
     mult(n, type) {
         //if (type === 'dot' && n instanceof Matrix && this.rows === n.cols && this.cols === n.rows) {
         if (type === 'mult' && n instanceof Matrix && this.cols === n.rows ) { //{ && this.cols === n.rows) {
