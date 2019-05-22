@@ -34,6 +34,11 @@ class NeuralNetwork {
         let inputs = Matrix.fromArray(inputsArray, 'NnInputs');
         let hidden = Matrix.multiply(this.whtsBtweenInAndHidden, inputs, 'NnMultHiddenByInputs');
         hidden.add(this.biasHidden);
-        return hidden.execFuncForEveryCell(NeuralNetwork.sigmoid);
+        hidden.execFuncForEveryCell(NeuralNetwork.sigmoid);
+        let output = Matrix.multiply(this.whtsBtweenHiddenAndOut,hidden);
+        output.add(this.biasOut);
+        output.execFuncForEveryCell(NeuralNetwork.sigmoid);
+        return  output.data._data.flat();
+        //return  output.data._data;
     }
 }

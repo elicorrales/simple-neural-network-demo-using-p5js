@@ -26,6 +26,9 @@ class Matrix {
         return tempM;
     }
 
+    static toArray(matrix) {
+        return matrix.data._data;
+    }
 
     print() {
         console.log('======Matrix======');
